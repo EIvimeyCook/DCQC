@@ -1,0 +1,25 @@
+---
+title: "SORTEE DCQC Quality Checklist Report"
+author: "`r params$reviewer_name`"
+date: "`r format(params$report_date, '%d %B %Y')`"
+output: pdf_document
+params:
+  paper_title: "Example Paper"
+  reviewer_name: "Example Reviewer"
+  journal_name: "Example Journal"
+  report_date: !r Sys.Date()
+  card_data: !r list()
+---
+
+**`r params$paper_title`**
+
+*`r params$journal_name`*
+
+---
+
+```{r echo=FALSE, results='asis'}
+for (item in params$card_data) {
+  cat(paste0("### ", item$label, "\n\n"))
+  cat("**Response:** ", ifelse(is.null(item$response), "Not answered", item$response), "\n\n")
+  cat("**Comment:** ", ifelse(is.null(item$comment) || item$comment == "", "No comment provided.", item$comment), "\n\n")
+}
