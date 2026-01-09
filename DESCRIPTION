@@ -1,5 +1,5 @@
-Package: SORTEE.DCQC
-Title: SORTEE.DCQC
+Package: SORTEEDCQC
+Title: SORTEEDCQC
 Version: 0.0.0.9000
 Authors@R: c(
     person("Ed", "Ivimey-Cook", , "e.ivimeycook@gmail.com", role = c("aut", "cre")),
