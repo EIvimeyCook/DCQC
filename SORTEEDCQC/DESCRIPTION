@@ -1,0 +1,19 @@
+Package: SORTEEDCQC
+Title: SORTEEDCQC
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Ed", "Ivimey-Cook", , "e.ivimeycook@gmail.com", role = c("aut", "cre")),
+    person("Joel", "Pick", , "joel.l.pick@gmail.com", role = "aut")
+  )
+Description: Allows data editors to review papers according to the SORTEE gudielines.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: 
+    bslib,
+    shiny,
+    shinyalert,
+    shinyjs,
+    shinyWidgets,
+    tippy
