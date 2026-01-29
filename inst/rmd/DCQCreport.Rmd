@@ -1,5 +1,5 @@
 ---
-title: "SORTEE DCQC Quality Checklist Report"
+title: "SORTEE DCQC Report"
 author: "`r params$reviewer_name`"
 date: "`r format(params$report_date, '%d %B %Y')`"
 output: pdf_document

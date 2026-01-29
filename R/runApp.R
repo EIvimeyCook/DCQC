@@ -3,10 +3,10 @@
 #' @return A .rtf of the DCQC review
 #' @export
 
-SORTEEDCQC <- function() {
+DCQC <- function() {
     shiny_env <- 1
     envir <- as.environment(shiny_env)
 
-    appDir <- system.file("SORTEEDCQC", package = "SORTEEDCQC")
+    appDir <- system.file("DCQC", package = "DCQC")
     shiny::runApp(appDir, display.mode = "normal")
   }
