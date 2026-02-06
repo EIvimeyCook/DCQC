@@ -5,7 +5,7 @@ server <- function(input, output, session) {
       paste0("DCQC_Report_", input$paper_title, "_", input$reviewer_name, ".pdf")
     },
     content = function(file) {
-      template_path <- system.file("rmd", "DCQCreport.Rmd", package = "DCQC")
+      template_path <- system.file("DCQC/rmd", "DCQCreport.Rmd", package = "DCQC")
       tempReport <- file.path(tempdir(), "DCQCreport.Rmd")
       file.copy(template_path, tempReport, overwrite = TRUE)
 
