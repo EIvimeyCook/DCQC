@@ -1,51 +1,67 @@
 server <- function(input, output, session) {
   
-  output$download_DCQCpdf <- shiny::downloadHandler(
-    filename = function() {
-      paste0("DCQC_Report_", input$paper_title, "_", input$reviewer_name, ".pdf")
-    },
-    content = function(file) {
-      template_path <- system.file("DCQC/rmd", "DCQCreport.Rmd", package = "DCQC")
-      tempReport <- file.path(tempdir(), "DCQCreport.Rmd")
-      file.copy(template_path, tempReport, overwrite = TRUE)
-
-      card_data <- lapply(names(card_labels), function(id) {
-        response <- input[[paste0("check_", id)]]
-        comment <- input[[paste0("item_", id, "_comment")]]
-        if (!is.null(response)) {
-          list(
-            id = id,
-            label = card_labels[[id]],
-            response = response,
-            comment = comment
-          )
-        } else {
-          NULL
-        }
-      })
-
-      card_data <- Filter(Negate(is.null), card_data)
-
-      paper_title <- if (input$paper_title == "") "No Title Given" else input$paper_title
-      reviewer_name <- if (input$reviewer_name == "") "No Name Given" else input$reviewer_name
-      journal_name <- if (input$journal_name == "") "No Journal Given" else input$journal_name
-      
-      params <- list(
-        paper_title = paper_title,
-        reviewer_name = reviewer_name,
-        journal_name = journal_name,
-        report_date = Sys.Date(),
-        card_data = card_data
+output$download_DCQCmd <- shiny::downloadHandler(
+  filename = function() {
+    paste0("DCQC_Report_", input$paper_title, "_", input$reviewer_name, ".md")
+  },
+  content = function(file) {
+    # Collect the same data as PDF
+    card_data <- lapply(names(card_labels), function(id) {
+      response <- input[[paste0("check_", id)]]
+      comment <- input[[paste0("item_", id, "_comment")]]
+      if (!is.null(response)) {
+        list(
+          id = id,
+          label = card_labels[[id]],
+          response = response,
+          comment = comment
+        )
+      } else {
+        NULL
+      }
+    })
+    card_data <- Filter(Negate(is.null), card_data)
+    
+    paper_title <- if (input$paper_title == "") "No Title Given" else input$paper_title
+    reviewer_name <- if (input$reviewer_name == "") "No Name Given" else input$reviewer_name
+    journal_name <- if (input$journal_name == "") "No Journal Given" else input$journal_name
+    
+    # Generate markdown content
+    md <- c(
+      "# Data and Code Quality Control Report",
+      "",
+      paste0("**Paper Title:** ", paper_title),
+      paste0("**Reviewer:** ", reviewer_name),
+      paste0("**Journal:** ", journal_name),
+      paste0("**Date:** ", Sys.Date()),
+      "",
+      "---",
+      "",
+      "## Quality Control Checklist",
+      ""
+    )
+    
+    for (card in card_data) {
+      md <- c(md,
+        paste0("### ", card$label),
+        paste0("**Response:** ", card$response)
       )
-
-      rmarkdown::render(
-        input = tempReport,
-        output_file = file,
-        params = params,
-        envir = new.env(parent = globalenv())
-      )
+      if (!is.null(card$comment) && nchar(card$comment) > 0) {
+        md <- c(md, paste0("**Comment:** ", card$comment))
+      }
+      md <- c(md, "")
     }
-  )
+    
+    md <- c(md,
+      "---",
+      "",
+      "*Report generated using DCQC (SORTEE Guidelines)*"
+    )
+    
+    writeLines(md, file, useBytes = TRUE)
+  },
+  contentType = "text/markdown"
+)
 
 
 
