@@ -14,3 +14,4 @@ The only function metRscreen is DCQC().
 library(DCQC)
 DCQC()
 ```
+There is also a dedicated website that prdouces a html output of the report: (https://eivimeycook.github.io/DCQC/)[https://eivimeycook.github.io/DCQC/]
