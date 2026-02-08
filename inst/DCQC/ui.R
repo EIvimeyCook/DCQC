@@ -4,11 +4,15 @@ ui <- function() {
   bslib::page_fluid(
     theme = bslib::bs_theme(
       version = 5,
-      base_font = bslib::font_collection(bslib::font_google("Atkinson Hyperlegible"), "Arial Narrow Bold", "sans-serif"),
-      code_font = bslib::font_collection(bslib::font_google("Atkinson Hyperlegible"), "Arial Narrow Bold", "sans-serif"),
      bootswatch = "zephyr"
     ),
-    
+    shiny::tags$script(shiny::HTML("
+  Shiny.addCustomMessageHandler('openHTML', function(html) {
+    var win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
+  });
+")),
     shinyjs::useShinyjs(),
     title = "SORTEE DCQC",
     fluidRow(
@@ -43,7 +47,7 @@ ui <- function() {
             shiny::htmlOutput("journal_name_output")
           )
           ),
-          shiny::downloadButton("download_DCQCpdf", "Download Text Report",class = "btn-info")
+          shiny::actionButton("download_DCQCmd", "View HTML Report", class = "btn-info")
         ),
       div(id = "stage1_title",
       h4("Stage 1: Data must be archived and adhere to FAIR guiding principles.")
