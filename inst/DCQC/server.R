@@ -1,5 +1,27 @@
+markdown_to_html <- function(text) {
+  if (is.null(text) || text == "") {
+    return(text)
+  }
+
+  # Convert newlines to <br>
+  text <- gsub("\n", "<br>", text)
+
+  # Convert bold **text** to <strong>text</strong>
+  text <- gsub("\\*\\*(.+?)\\*\\*", "<strong>\\1</strong>", text)
+
+  # Convert italic *text* to <em>text</em>
+  text <- gsub("(?<!\\*)\\*(?!\\*)(.+?)(?<!\\*)\\*(?!\\*)", "<em>\\1</em>", text, perl = TRUE)
+
+  # Convert links [text](url) to <a href="url">text</a>
+  text <- gsub("\\[(.+?)\\]\\((.+?)\\)", '<a href="\\2" target="_blank">\\1</a>', text)
+
+  # Convert inline code `code` to <code>code</code>
+  text <- gsub("`(.+?)`", "<code>\\1</code>", text)
+
+  return(text)
+}
+
 server <- function(input, output, session) {
-  
   observeEvent(input$download_DCQCmd, {
     card_data <- lapply(names(card_labels), function(id) {
       response <- input[[paste0("check_", id)]]
@@ -16,74 +38,88 @@ server <- function(input, output, session) {
       }
     })
     card_data <- Filter(Negate(is.null), card_data)
-    
+
     paper_title <- if (input$paper_title == "") "No Title Given" else input$paper_title
     reviewer_name <- if (input$reviewer_name == "") "No Name Given" else input$reviewer_name
     journal_name <- if (input$journal_name == "") "No Journal Given" else input$journal_name
-    filename <- paste0("DCQC_Report_", gsub("[^A-Za-z0-9_-]", "_", paper_title), "_", 
-                       gsub("[^A-Za-z0-9_-]", "_", reviewer_name), ".html")
-    
+    filename <- paste0(
+      "DCQC_Report_", gsub("[^A-Za-z0-9_-]", "_", paper_title), "_",
+      gsub("[^A-Za-z0-9_-]", "_", reviewer_name), ".html"
+    )
+
     html <- paste0(
       '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>DCQC Report</title>',
-      '<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}',
-      'h1{color:#2c3e50;border-bottom:3px solid #3498db;padding-bottom:10px}',
-      'h2{color:#34495e;margin-top:30px;border-bottom:2px solid #95a5a6;padding-bottom:5px}',
-      'h3{color:#7f8c8d;margin-top:20px}',
-      '.info{background-color:#ecf0f1;padding:15px;border-radius:5px;margin:20px 0}',
-      '.info p{margin:5px 0}',
-      '.checklist-item{background-color:#f8f9fa;padding:15px;margin:15px 0;border-left:4px solid #3498db;border-radius:3px}',
-      '.response{font-weight:bold;color:#2980b9}',
-      '.comment{margin-top:10px;font-style:italic;color:#555}',
-      'hr{border:none;border-top:2px solid #bdc3c7;margin:30px 0}',
-      '.footer{text-align:center;color:#7f8c8d;font-size:0.9em;margin-top:40px}',
-      '.download-btn{display:inline-block;padding:10px 20px;background:#3498db;color:white;',
-      'text-decoration:none;border-radius:5px;margin:20px 0;cursor:pointer;border:none;font-size:16px}',
-      '.download-btn:hover{background:#2980b9}',
-      '@media print{.no-print{display:none}}',
-      '</style></head><body>',
+      "<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}",
+      "h1{color:#2c3e50;border-bottom:3px solid #3498db;padding-bottom:10px}",
+      "h2{color:#34495e;margin-top:30px;border-bottom:2px solid #95a5a6;padding-bottom:5px}",
+      "h3{color:#7f8c8d;margin-top:20px}",
+      ".info{background-color:#ecf0f1;padding:15px;border-radius:5px;margin:20px 0}",
+      ".info p{margin:5px 0}",
+      ".checklist-item{background-color:#f8f9fa;padding:15px;margin:15px 0;border-left:4px solid #3498db;border-radius:3px}",
+      ".response{font-weight:bold;color:#2980b9}",
+      ".comment{margin-top:10px;font-style:italic;color:#555}",
+      "code{background:#f4f4f4;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:0.9em}",
+      "a{color:#3498db;text-decoration:none}",
+      "a:hover{text-decoration:underline}",
+      "hr{border:none;border-top:2px solid #bdc3c7;margin:30px 0}",
+      ".footer{text-align:center;color:#7f8c8d;font-size:0.9em;margin-top:40px}",
+      ".download-btn{display:inline-block;padding:10px 20px;background:#3498db;color:white;",
+      "text-decoration:none;border-radius:5px;margin:20px 0;cursor:pointer;border:none;font-size:16px}",
+      ".download-btn:hover{background:#2980b9}",
+      "@media print{.no-print{display:none}}",
+      "</style></head><body>",
       '<div class="no-print" style="text-align:center">',
       '<button class="download-btn" onclick="downloadHTML()">💾 Download This Report</button>',
-      '</div>',
-      '<h1>Data and Code Quality Control Report</h1>',
+      "</div>",
+      "<h1>SORTEE DCQC Report</h1>",
       '<div class="info">',
-      '<p><strong>Paper Title:</strong> ', paper_title, '</p>',
-      '<p><strong>Reviewer:</strong> ', reviewer_name, '</p>',
-      '<p><strong>Journal:</strong> ', journal_name, '</p>',
-      '<p><strong>Date:</strong> ', Sys.Date(), '</p>',
-      '</div><hr><h2>Quality Control Checklist</h2>'
+      "<p><strong>Paper Title:</strong> ", paper_title, "</p>",
+      "<p><strong>Reviewer:</strong> ", reviewer_name, "</p>",
+      "<p><strong>Journal:</strong> ", journal_name, "</p>",
+      "<p><strong>Date:</strong> ", Sys.Date(), "</p>",
+      "</div><hr><h2>DCQC Checklist</h2>"
     )
-    
+
     for (card in card_data) {
-      html <- paste0(html,
-                     '<div class="checklist-item"><h3>', card$label, '</h3>',
-                     '<p class="response">Response: ', card$response, '</p>'
+      # Match the Rmd logic exactly
+      response_text <- ifelse(is.null(card$response), "Not answered", card$response)
+      comment_text <- ifelse(is.null(card$comment) || card$comment == "", "No comment provided.", card$comment)
+
+      # Convert markdown to HTML for both label and comment
+      label_html <- markdown_to_html(card$label)
+      comment_text <- markdown_to_html(comment_text)
+
+      html <- paste0(
+        html,
+        '<div class="checklist-item"><h3>', label_html, "</h3>",
+        '<p class="response">Response: ', response_text, "</p>",
+        '<p class="comment">Comment: ', comment_text, "</p>",
+        "</div>"
       )
-      if (!is.null(card$comment) && nchar(card$comment) > 0) {
-        html <- paste0(html, '<p class="comment">Comment: ', card$comment, '</p>')
-      }
-      html <- paste0(html, '</div>')
     }
-    
-    html <- paste0(html,
-                   '<hr><div class="footer"><p><em>Report generated using DCQC (SORTEE Guidelines)</em></p></div>',
-                   '<script>',
-                   'function downloadHTML() {',
-                   '  var blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});',
-                   '  var url = URL.createObjectURL(blob);',
-                   '  var a = document.createElement("a");',
-                   '  a.href = url;',
-                   '  a.download = "', filename, '";',
-                   '  document.body.appendChild(a);',
-                   '  a.click();',
-                   '  document.body.removeChild(a);',
-                   '  URL.revokeObjectURL(url);',
-                   '}',
-                   '</script>',
-                   '</body></html>'
+
+    html <- paste0(
+      html,
+      '<hr><div class="footer"><p><em>Report generated using SORTEE DCQC Guidelines</em></p></div>',
+      "<script>",
+      "function downloadHTML() {",
+      '  var blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});',
+      "  var url = URL.createObjectURL(blob);",
+      '  var a = document.createElement("a");',
+      "  a.href = url;",
+      '  a.download = "', filename, '";',
+      "  document.body.appendChild(a);",
+      "  a.click();",
+      "  document.body.removeChild(a);",
+      "  URL.revokeObjectURL(url);",
+      "}",
+      "</script>",
+      "</body></html>"
     )
-    
+
     session$sendCustomMessage("openHTML", html)
   })
+
   data_modal <- shiny::modalDialog(
     easyClose = FALSE,
     footer = NULL,
@@ -148,56 +184,61 @@ server <- function(input, output, session) {
   shiny::showModal(data_modal)
 
   shiny::observeEvent(input$submit_data_modal, {
-    
     output$paper_title_output <- shiny::renderUI({
-      if(input$paper_title == ""){
+      if (input$paper_title == "") {
         shiny::HTML(paste(
           "<p>",
           "<b>Title:</b> No Title Given",
           "</p>"
         ))
-      } else(
-      shiny::HTML(paste(
-        "<p>",
-        "<b>Title:</b>",
-        input$paper_title,
-        "</p>"
-      ))
-      )
+      } else {
+        (
+          shiny::HTML(paste(
+            "<p>",
+            "<b>Title:</b>",
+            input$paper_title,
+            "</p>"
+          ))
+        )
+      }
     })
 
     output$reviewer_name_output <- shiny::renderUI({
-      if(input$reviewer_name == ""){
+      if (input$reviewer_name == "") {
         shiny::HTML(paste(
           "<p>",
           "<b>Name:</b> No Name Given",
           "</p>"
         ))
-      } else(
-      shiny::HTML(paste(
-        "<p>",
-        "<b>Name:</b>",
-        input$reviewer_name,
-        "</p>"
-      ))
-      )
+      } else {
+        (
+          shiny::HTML(paste(
+            "<p>",
+            "<b>Name:</b>",
+            input$reviewer_name,
+            "</p>"
+          ))
+        )
+      }
     })
 
     output$journal_name_output <- shiny::renderUI({
-      if(input$journal_name == ""){
+      if (input$journal_name == "") {
         shiny::HTML(paste(
           "<p>",
           "<b>Journal:</b> No Journal Given",
           "</p>"
         ))
-      } else(
-      shiny::HTML(paste(
-        "<p>",
-        "<b>Journal:</b>",
-        input$journal_name,
-        "</p>"
-      ))
-      )
+      } else {
+        (
+          shiny::HTML(paste(
+            "<p>",
+            "<b>Journal:</b>",
+            input$journal_name,
+            "</p>"
+          ))
+        )
+      }
     })
 
     if ("Stage 1" %in% input$stage_checks) {
