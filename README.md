@@ -102,13 +102,6 @@ DCQC/
 └── LICENSE.md
 ```
 
-Edit the app in `inst/DCQC/`, then regenerate the site:
-
-```r
-shinylive::export("inst/DCQC", "docs")
-httpuv::runStaticServer("docs/")
-```
-
 ## Bug reports and contributions
 
 Please file issues and feature requests at
