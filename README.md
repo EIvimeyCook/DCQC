@@ -1,4 +1,137 @@
-## Installation and Use 
-For the package version install from SORTEE/DCQC.
+<p align="center">
+  <img src="https://github.com/EIvimeyCook/DCQC/blob/main/inst/DCQC/www/circle_black.png" width = "200"/>
+</p>
 
-This is the repository for the dedicated website that produces a html output of the report: [https://eivimeycook.github.io/DCQC/](https://eivimeycook.github.io/DCQC/)
+<div align="center">
+ <h1>DCQC</h1>
+</div>
+
+<!-- badges: start -->
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE.md)
+[![Launch app](https://img.shields.io/badge/launch-app-brightgreen)](https://eivimeycook.github.io/DCQC/)
+[![DOI](https://img.shields.io/badge/guidelines-10.24072%2Fpcjournal.687-blue)](https://doi.org/10.24072/pcjournal.687)
+<!-- badges: end -->
+
+DCQC is a Shiny app that helps data editors carry out **structured quality control of the data and code archived alongside a manuscript**. It turns the SORTEE guidelines for data and code quality control into a working checklist: fifteen items across six stages, each with the full
+guideline text, a Yes/No verdict, and a comment box.
+
+This is the repository for the dedicated website that produces a **HTML output**
+of the report: **<https://eivimeycook.github.io/DCQC/>**. The app is compiled to
+WebAssembly with [shinylive](https://posit-dev.github.io/r-shinylive/), so the
+entire R session runs inside the reviewer's own browser tab — no installation, no
+account, and nothing uploaded to a server. For the package version, which
+produces a PDF report, install from [SORTEE/DCQC](https://github.com/SORTEE/DCQC).
+
+## Features
+
+- **Implements a published standard.** The checklist is a direct implementation of
+  [Pick *et al.* (2026)](https://doi.org/10.24072/pcjournal.687), so reviews are
+  comparable across editors and journals.
+- **Six stages, chosen at launch.** Reviewing only archived data? You are never
+  shown the code items.
+- **Guideline text inline.** Each item shows the full wording, with links to
+  recommended repositories and licence choosers, so you are not switching between
+  documents.
+- **Comment box on every item.** The verdicts summarise; the comments are where
+  you record what was missing, what you fixed, and what the authors must address.
+- **Self-contained HTML report.** Opens in a new tab with a one-click download,
+  and carries print styling so it converts cleanly to PDF.
+- **Runs entirely in the browser.** No R, no install, no server, nothing uploaded.
+- **Try it without cloning.** An in-browser editor with a live viewer and R
+  terminal is published at
+  [/edit/](https://eivimeycook.github.io/DCQC/edit/).
+
+## Usage
+
+Open **<https://eivimeycook.github.io/DCQC/>**. Give it a moment on first load —
+the browser is downloading an R runtime — then:
+
+1. **Set up the review.** Enter the paper title, your name, and the journal, and
+   tick the stages you are reviewing.
+2. **Work through the checklist.** Yes/No and a comment for each item.
+3. **Click "View HTML Report".** The report opens in a new tab. Use the download
+   button at the top to save it, or print to PDF.
+
+Items in unselected stages, and items you leave unanswered, are omitted from the
+report rather than counted as failures.
+
+## The six stages
+
+| Stage | Focus | Items |
+| :---- | :---- | :---- |
+| **1** | Data must be archived and adhere to FAIR guiding principles | 1–5 |
+| **2** | Archived data corresponds with the data reported in the manuscript | 6 |
+| **3** | Code must be archived and adhere to FAIR guiding principles | 7–11 |
+| **4** | Archived code corresponds with the workflow reported in the manuscript | 12 |
+| **5** | Archived code runs with the archived data | 13 |
+| **6** | Results can be computationally reproduced by running the archived code | 14–15 |
+
+Stages 1 and 3 cover deposition in an open repository with a citable DOI,
+licensing, completeness, non-proprietary formats, and metadata. Stages 2 and 4
+check that what is archived matches what the manuscript claims. Stages 5 and 6
+cover execution and computational reproducibility of numbers and figures, with
+room to record any tolerance applied — for example the percentage-discrepancy
+measure of [Hardwicke *et al.* (2021)](https://doi.org/10.1098/rsos.201494).
+
+## Which version should I use?
+
+| | **Web version** (this repo) | **R package** |
+| :-- | :-- | :-- |
+| Where | <https://eivimeycook.github.io/DCQC/> | [SORTEE/DCQC](https://github.com/SORTEE/DCQC) |
+| Install | None | R, plus Pandoc and LaTeX |
+| Report format | Self-contained HTML | PDF |
+| Best for | A one-off review, a reviewer without R, teaching and workshops | Routine editorial use, or PDFs to attach to a decision letter |
+
+Both present identical checklist wording, so a review done in one is directly
+comparable to a review done in the other.
+
+## Repository structure
+
+```text
+DCQC/
+├── inst/DCQC/                    # app source
+│   ├── ui.R                      # layout and checklist cards
+│   ├── server.R                  # stage logic and HTML report builder
+│   ├── global.R
+│   ├── utilities/create_card.R   # card helper and guideline text
+│   └── www/circle_black.png
+├── docs/                         # deployed site, generated by shinylive
+├── R/runApp.R
+├── man/
+├── DESCRIPTION
+└── LICENSE.md
+```
+
+Edit the app in `inst/DCQC/`, then regenerate the site:
+
+```r
+shinylive::export("inst/DCQC", "docs")
+httpuv::runStaticServer("docs/")
+```
+
+## Bug reports and contributions
+
+Please file issues and feature requests at
+<https://github.com/EIvimeyCook/DCQC/issues>. Pull requests are welcome.
+
+Changes to the **wording of the checklist items** should go upstream to
+[SORTEE/DCQC](https://github.com/SORTEE/DCQC) — this repository tracks the
+published guidelines rather than diverging from them. Fixes to the web build
+belong here.
+
+## Citation
+
+Please cite the guidelines the app implements:
+
+> Pick, J. L., Allen, B. J., Bachelot, B., Bairos-Novak, K. R., Brand, J. A.,
+> Class, B., Dallas, T., D'Amelio, P. B., Fenollosa, E., Fernández-Juricic, E.,
+> Gomes, D. G. E., Grainger, M. J., Guillemaud, T., John, C., Krasnow, R.,
+> Lagisz, M., Lequime, S., Maynard, D. S., Nakagawa, S., O'Dea, R. E., Paquet, M.,
+> Petitjean, Q., Sánchez-Tójar, A., van Dis, N. E., Wilson, L. A. B., &
+> Ivimey-Cook, E. R. (2026). The SORTEE guidelines for data and code quality
+> control in ecology and evolutionary biology. *Peer Community Journal*, 6, e20.
+> <https://doi.org/10.24072/pcjournal.687>
+
+## License
+
+Released under the [MIT License](LICENSE.md).
