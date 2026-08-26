@@ -7,9 +7,9 @@
 </div>
 
 <!-- badges: start -->
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE.md)
 [![Launch app](https://img.shields.io/badge/launch-app-brightgreen)](https://eivimeycook.github.io/DCQC/)
-[![DOI](https://img.shields.io/badge/guidelines-10.24072%2Fpcjournal.687-blue)](https://doi.org/10.24072/pcjournal.687)
+[![guidelines](https://img.shields.io/badge/guidelines-10.24072%2Fpcjournal.687-blue)](https://doi.org/10.24072/pcjournal.687)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE.md)
 <!-- badges: end -->
 
 DCQC is a Shiny app that helps data editors carry out **structured quality control of the data and code archived alongside a manuscript**. It turns the SORTEE guidelines for data and code quality control into a working checklist: fifteen items across six stages, each with the full
