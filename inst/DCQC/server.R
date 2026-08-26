@@ -268,7 +268,7 @@ server <- function(input, output, session) {
     if ("Stage 3" %in% input$stage_checks) {
       shiny::removeModal()
       shinyjs::show("review_summary")
-      shinyjs::show("ddownload_DCQCmd")
+      shinyjs::show("download_DCQCmd")
       shinyjs::show("stage3_title")
       shinyjs::show("7")
       shinyjs::show("8")
