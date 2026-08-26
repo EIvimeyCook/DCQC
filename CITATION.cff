@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: "Ivimey-Cook"
+    given-names: "Edward R."
+    orcid: "https://orcid.org/0000-0003-4910-0443"
+  - family-names: "Pick"
+    given-names: "Joel L."
+    orcid: "https://orcid.org/0000-0002-6295-3742"
+title: "DCQC: Data and code quality control for ecology and evolutionary biology"
+abstract: "A Shiny application implementing the SORTEE guidelines for data and code quality control, allowing data editors and reviewers to assess archived data and code against a fifteen-item, six-stage checklist and export a report."
+version: 0.0.0.9000
+url: "https://github.com/EIvimeyCook/DCQC"
+repository-code: "https://github.com/EIvimeyCook/DCQC"
+license: MIT
+keywords:
+  - "quality control"
+  - "open science"
+  - "reproducibility"
+  - "peer review"
+  - "data editor"
+  - "shiny"
+  - "R"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Pick"
+      given-names: "Joel L."
+    - family-names: "Ivimey-Cook"
+      given-names: "Edward R."
+  title: "The SORTEE guidelines for data and code quality control in ecology and evolutionary biology"
+  journal: "Peer Community Journal"
+  year: 2026
+  volume: 6
+  start: "e20"
+  doi: 10.24072/pcjournal.687
+  notes: "Full author list of 26; see the publication record."
