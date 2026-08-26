@@ -7,7 +7,7 @@
 DCQC()
 }
 \value{
-A .rtf of the DCQC review
+A .html of the DCQC review
 }
 \description{
 The SORTEE DCQC reviewing app allows data editors to review papers according to the SORTEE guidelines.
