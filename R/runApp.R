@@ -1,6 +1,6 @@
 #' @title Run the DCQC reviewing app
 #' @description The SORTEE DCQC reviewing app allows data editors to review papers according to the SORTEE guidelines.
-#' @return A .rtf of the DCQC review
+#' @return A .html of the DCQC review
 #' @export
 
 DCQC <- function() {
