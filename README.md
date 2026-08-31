@@ -37,9 +37,6 @@ produces a PDF report, install from [SORTEE/DCQC](https://github.com/SORTEE/DCQC
 - **Self-contained HTML report.** Opens in a new tab with a one-click download,
   and carries print styling so it converts cleanly to PDF.
 - **Runs entirely in the browser.** No R, no install, no server, nothing uploaded.
-- **Try it without cloning.** An in-browser editor with a live viewer and R
-  terminal is published at
-  [/edit/](https://eivimeycook.github.io/DCQC/edit/).
 
 ## Usage
 
