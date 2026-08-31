@@ -121,8 +121,8 @@ Please cite the guidelines the app implements:
 > Ivimey-Cook, E. R. (2026). The SORTEE guidelines for data and code quality
 > control in ecology and evolutionary biology. *Peer Community Journal*, 6, e20.
 > <https://doi.org/10.24072/pcjournal.687>
->
-> A machine-readable [`CITATION.cff`](CITATION.cff) is included, so GitHub's
+
+A machine-readable [`CITATION.cff`](CITATION.cff) is included, so GitHub's
 "Cite this repository" button gives formatted APA and BibTeX.
 
 ## License
