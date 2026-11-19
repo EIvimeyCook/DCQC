@@ -1,0 +1,47 @@
+# Exports the Shiny app in inst/DCQC with Shinylive and publishes it to
+# GitHub Pages. Needs Settings > Pages > Source set to "GitHub Actions".
+# Local preview:
+#   Rscript -e 'shinylive::export("inst/DCQC", "_site")'
+#   python3 -m http.server 8765 --directory _site
+name: Deploy web app
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::shinylive
+      - name: Build web app
+        run: Rscript -e 'shinylive::export("inst/DCQC", "_site", template_params = list(title = "DCQC"))'
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
